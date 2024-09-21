@@ -2,7 +2,7 @@ import pygame
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, health, damage, protection, speed, pos, image_name):
-            pygame.sprite.Sprite.__init__
+            pygame.sprite.Sprite.__init__(self)
             self.image_name = pygame.image.load(image_name)
             self.height = 32
             self.width = 32

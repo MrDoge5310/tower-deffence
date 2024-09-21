@@ -3,7 +3,7 @@ import pygame
 
 class Tower(pygame.sprite.Sprite):
     def __init__(self, image_name, health, speed, damage, protection):
-        pygame.sprite.Sprite.__init__
+        pygame.sprite.Sprite.__init__(self)
         self.image_name = pygame.image.load(image_name)
         self.height = 32
         self.width = 32
@@ -14,9 +14,9 @@ class Tower(pygame.sprite.Sprite):
         self.damage = damage
         self.protection = protection
         self.hp_lvl = 0
-        self.sp_lvl = 0
-        self.dm_lvl = 0
-        self.pr_lvl = 0
+        self.attack_speed_lvl = 0
+        self.damage_lvl = 0
+        self.protection_lvl = 0
 
         self.can_attack = False
         self.cooldown = 0
@@ -31,3 +31,4 @@ class Tower(pygame.sprite.Sprite):
                     self.cooldown = 0
                 else:
                     self.cooldown += 1
+
