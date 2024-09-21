@@ -2,24 +2,24 @@ import pygame
 
 
 class Tower(pygame.sprite.Sprite):
-    def __init__(self, image_name, health, speed, damage, protection):
+    def __init__(self, image_name, pos):
         pygame.sprite.Sprite.__init__(self)
-        self.image_name = pygame.image.load(image_name)
-        self.height = 32
-        self.width = 32
+        self.image = pygame.image.load(image_name)
+        self.height = 100
+        self.width = 50
         self.image = pygame.transform.scale(self.image, (self.height, self.width))
 
-        self.health = health
-        self.speed = speed
-        self.damage = damage
-        self.protection = protection
-        self.hp_lvl = 0
-        self.attack_speed_lvl = 0
-        self.damage_lvl = 0
-        self.protection_lvl = 0
+        self.health = 1000
+        self.attack_speed = 1  # пострілів в секунду
+        self.damage = 10
+        self.protection = 10  # відсотків
+        self.hp_lvl = 1
+        self.attack_speed_lvl = 1
+        self.damage_lvl = 1
+        self.protection_lvl = 1
 
         self.can_attack = False
-        self.cooldown = 0
+        self.cooldown = 60 / self.attack_speed
 
         def take_damage(self):
             pass
@@ -32,3 +32,27 @@ class Tower(pygame.sprite.Sprite):
                 else:
                     self.cooldown += 1
 
+
+class Projectile:
+    def __init__(self, pos, damage, image_name):
+        self.image = pygame.image.load('img/arrow.png')
+        self.width, self.height = 50, 25
+        self.image = pygame.transform.scale(self.image, (self.height, self.width))
+
+        self.rect = self.image.get_rect()
+        self.rect.center = pos
+        self.damage = damage
+        self.speed = 5
+        self.direction = direction
+
+    def move(self):
+        pass
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, 'yellow', self.rect)
+
+    def launch(self, direction):
+        pass
+
+    def check_hit(self):
+        pass
