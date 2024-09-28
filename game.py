@@ -12,7 +12,9 @@ class Game():
 
         self.running = True
 
-        # self.tower = Tower("tower.png")
+        self.tower = Tower("img/tower/tower_img.png", (self.width // 2, self.height // 2))
+        self.tower_group = pygame.sprite.Group()
+        self.tower_group.add(self.tower)
 
     def main_loop(self):
         while self.running:
@@ -21,6 +23,8 @@ class Game():
                     self.running = False
 
             self.screen.fill('green')
+
+            self.tower_group.draw(self.screen)
 
             pygame.display.update()
             self.clock.tick(self.fps)

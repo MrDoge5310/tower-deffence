@@ -3,11 +3,11 @@ import pygame
 
 class Tower(pygame.sprite.Sprite):
     def __init__(self, image_name, pos):
-        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
         self.image = pygame.image.load(image_name)
-        self.height = 100
-        self.width = 50
-        self.image = pygame.transform.scale(self.image, (self.height, self.width))
+        self.height = 300
+        self.width = 300
+        self.image = pygame.transform.scale(self.image, (self.width, self.height))
 
         self.rect = self.image.get_rect()
         self.rect.center = pos
