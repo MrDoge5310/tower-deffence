@@ -19,13 +19,13 @@ class Game():
 
         x = self.width // 2
         y = self.height // 2
+        self.bush_group = pygame.sprite.Group()
         self.bush_positions = [(x-600, y-300), (x+650, y+100), (x + 120, y+350),
                                (x-680, y+100), (x-400, y+350), (x + 200, y-350),
                                (x -200, y-350), (x + 600, y-200)]
-
         for pos in self.bush_positions:
             bush = Environment("img/bushes/bush1.png", pos)
-            self.tower_group.add(bush)
+            self.bush_group.add(bush)
 
     def main_loop(self):
         while self.running:
@@ -37,7 +37,8 @@ class Game():
 
             self.screen.fill('green')
 
-            self.tower_group.draw(self.screen)
+            self.tower.draw(self.screen)
+            self.bush_group.draw(self.screen)
 
             pygame.display.update()
             self.clock.tick(self.fps)

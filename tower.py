@@ -1,4 +1,5 @@
 import pygame
+import math
 
 
 class Tower(pygame.sprite.Sprite):
@@ -9,8 +10,12 @@ class Tower(pygame.sprite.Sprite):
         self.width = 300
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
 
+        self.archer_image = pygame.image.load("img/archer.png")
+        self.archer_image = pygame.transform.scale(self.archer_image, (100, 100))
+
         self.rect = self.image.get_rect()
         self.rect.center = pos
+        self.archer_pos = (self.rect.centerx - 50, self.rect.centery - 170)
 
         self.health = 1000
         self.attack_speed = 1  # пострілів в секунду
@@ -26,6 +31,10 @@ class Tower(pygame.sprite.Sprite):
 
         self.projectiles = []
 
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+        screen.blit(self.archer_image, self.archer_pos)
+
     def take_damage(self):
         pass
 
@@ -39,16 +48,28 @@ class Tower(pygame.sprite.Sprite):
 
 
 class Projectile:
-    def __init__(self, pos, damage):
+    def __init__(self, start_pos, target_pos, damage):
         self.image = pygame.image.load('img/arrow.png')
         self.width, self.height = 50, 25
         self.image = pygame.transform.scale(self.image, (self.height, self.width))
 
-        self.rect = self.image.get_rect()
-        self.rect.center = pos
         self.damage = damage
         self.speed = 5
-        self.direction = 0
+
+        self.x, self.y = start_pos
+        self.target_x, self.target_y = target_pos
+
+        # Рассчет направления и скорости
+        self.angle = math.atan2(self.target_y - self.y, self.target_x - self.x)
+        self.vel_x = self.speed * math.cos(self.angle)
+        self.vel_y = self.speed * math.sin(self.angle)
+
+        # Рассчет угла для поворота изображения (перевод в градусы)
+        self.rotation_angle = -math.degrees(self.angle)  # Угол поворота изображения (в градусах)
+
+        # Повернутое изображение стрелы
+        self.image = pygame.transform.rotate(self.image, self.rotation_angle)
+        self.rect = self.image.get_rect(center=start_pos)
 
     def move(self, direction):
         pass
