@@ -26,7 +26,7 @@ class Tower(pygame.sprite.Sprite):
         self.damage_lvl = 1
         self.protection_lvl = 1
 
-        self.can_attack = False
+        self.can_attack = True
         self.cooldown = 60 / self.attack_speed
 
         self.projectiles = []
@@ -34,23 +34,24 @@ class Tower(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
         screen.blit(self.archer_image, self.archer_pos)
-
+        for projectile in self.projectiles:
+            projectile.update(screen)
+            if projectile.check_hit():
+                self.projectiles.remove(projectile)
     def take_damage(self):
         pass
 
-    def shot(self):
-        if self.can_attack:
-            if self.cooldown == self.speed:
-                self.projectiles.append(Projectile(self.rect.center, self.damage))
-                self.cooldown = 0
-            else:
-                self.cooldown += 1
+    def shot(self, pos):
+        self.projectiles.append(Projectile(self.archer_pos, pos, self.damage))
+
+
+
 
 
 class Projectile:
     def __init__(self, start_pos, target_pos, damage):
         self.image = pygame.image.load('img/arrow.png')
-        self.width, self.height = 50, 25
+        self.width, self.height = 50, 50
         self.image = pygame.transform.scale(self.image, (self.height, self.width))
 
         self.damage = damage
@@ -65,17 +66,23 @@ class Projectile:
         self.vel_y = self.speed * math.sin(self.angle)
 
         # Рассчет угла для поворота изображения (перевод в градусы)
-        self.rotation_angle = -math.degrees(self.angle)  # Угол поворота изображения (в градусах)
+        self.rotation_angle = -math.degrees(self.angle) - 90  # Угол поворота изображения (в градусах)
 
         # Повернутое изображение стрелы
         self.image = pygame.transform.rotate(self.image, self.rotation_angle)
         self.rect = self.image.get_rect(center=start_pos)
 
-    def move(self, direction):
-        pass
+    def update(self, screen):
+        self.x += self.vel_x
+        self.y += self.vel_y
+        self.rect.center = (self.x, self.y)
+        self.draw(screen)
 
     def draw(self, screen):
-        pygame.draw.rect(screen, 'yellow', self.rect)
+        screen.blit(self.image, self.rect.center)
 
     def check_hit(self):
-        pass
+        if self.rect.centerx == self.target_x or self.rect.centery == self.target_y:
+            return True
+        else:
+            return False

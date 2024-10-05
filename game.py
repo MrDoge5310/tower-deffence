@@ -34,6 +34,10 @@ class Game():
                     self.running = False
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    # Получение позиции мыши при клике
+                    mouse_pos = pygame.mouse.get_pos()
+                    self.tower.shot(mouse_pos)
 
             self.screen.fill('green')
 
