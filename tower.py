@@ -45,9 +45,6 @@ class Tower(pygame.sprite.Sprite):
         self.projectiles.append(Projectile(self.archer_pos, pos, self.damage))
 
 
-
-
-
 class Projectile:
     def __init__(self, start_pos, target_pos, damage):
         self.image = pygame.image.load('img/arrow.png')
