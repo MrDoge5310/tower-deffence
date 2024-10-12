@@ -1,8 +1,11 @@
 import pygame
 from tower import Tower
 from enviorment import Environment
+from enemy import Enemy
+import random
 
-class Game():
+
+class Game:
     def __init__(self):
         self.width = 1600
         self.height = 900
@@ -27,6 +30,13 @@ class Game():
             bush = Environment("img/bushes/bush1.png", pos)
             self.bush_group.add(bush)
 
+        quantity = 10
+        self.enemy_group = pygame.sprite.Group()
+        for i in range(quantity):
+            pos = random.choice(self.bush_positions)
+            enemy = Enemy(self.tower.rect.center, pos, "img/enemies/enemy1.png")
+            self.enemy_group.add(enemy)
+
     def main_loop(self):
         while self.running:
             for event in pygame.event.get():
@@ -42,6 +52,7 @@ class Game():
             self.screen.fill('green')
 
             self.tower.draw(self.screen)
+            self.enemy_group.update(self.screen)
             self.bush_group.draw(self.screen)
 
             pygame.display.update()
