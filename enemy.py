@@ -1,6 +1,5 @@
 import pygame
 import math
-import random
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -49,7 +48,7 @@ class Enemy(pygame.sprite.Sprite):
             return True
 
     def update(self, screen):
-        self.move(self.target)
+        self.move()
         self.draw(screen)
 
     def draw(self, scr):
@@ -57,8 +56,7 @@ class Enemy(pygame.sprite.Sprite):
         pygame.draw.rect(scr, "red", self.health_bar_bg)
         pygame.draw.rect(scr, "white", self.health_bar)
 
-
-    def move(self, target):
+    def move(self):
         self.x += self.vel_x
         self.y += self.vel_y
         self.rect.center = (self.x, self.y)
