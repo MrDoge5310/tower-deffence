@@ -83,7 +83,7 @@ class Projectile:
         screen.blit(self.image, self.rect)
 
     def check_hit(self, enemy_group):  # додати параметр enemy_group
-        if self.rect.x > 1500 or self.rect < 0 or self.rect.y > 1000 or self.rect.y < 0:  # оптимізовано(в учнів трішки по іншому буде написано)
+        if self.rect.x > 1500 or self.rect.x < 0 or self.rect.y > 1000 or self.rect.y < 0:  # оптимізовано(в учнів трішки по іншому буде написано)
             return True
         for enemy in enemy_group.sprites():  # перевірка на дотикання до ворогів
             if self.rect.colliderect(enemy.rect):
