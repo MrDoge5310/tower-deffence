@@ -35,6 +35,9 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.image, self.rotation_angle)
         self.rect = self.image.get_rect(center=pos)
 
+        self.health_bar_bg = pygame.Rect(self.rect.x, self.rect.y - 50, self.rect.width, 5)
+        self.health_bar = pygame.Rect(self.health_bar_bg.x, self.health_bar_bg.y, self.rect.width, 5)
+
     def calculate_incoming_damage(self):
         pass
 
@@ -51,8 +54,15 @@ class Enemy(pygame.sprite.Sprite):
 
     def draw(self, scr):
         scr.blit(self.image, self.rect)
+        pygame.draw.rect(scr, "red", self.health_bar_bg)
+        pygame.draw.rect(scr, "white", self.health_bar)
+
 
     def move(self, target):
         self.x += self.vel_x
         self.y += self.vel_y
         self.rect.center = (self.x, self.y)
+
+        self.health_bar_bg.center = (self.x, self.y - 50)
+        self.health_bar.x, self.health_bar.y = self.health_bar_bg.topleft
+        self.health_bar.width = self.health * (self.health_bar_bg.width / 100)
