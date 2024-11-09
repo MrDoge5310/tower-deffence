@@ -2,6 +2,7 @@ import pygame
 import math
 import random
 
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, target, pos, image_name):
         super().__init__()
@@ -36,8 +37,13 @@ class Enemy(pygame.sprite.Sprite):
 
     def calculate_incoming_damage(self):
         pass
-    def take_damage(self):
-        pass
+
+    def take_damage(self, damage):
+        self.health -= damage
+
+    def check_death(self):
+        if self.health <= 0:
+            return True
 
     def update(self, screen):
         self.move(self.target)

@@ -51,7 +51,12 @@ class Game:
 
             self.screen.fill('green')
 
-            self.tower.draw(self.screen)
+            for enemy in self.enemy_group.sprites():
+                if enemy.check_death():  # перевірка смерті ворога і видалення його в разі смерті
+                    self.enemy_group.remove(enemy)
+                    break
+
+            self.tower.update(self.screen, self.enemy_group)  # дописати параметр self.enemy_group
             self.enemy_group.update(self.screen)
             self.bush_group.draw(self.screen)
 

@@ -19,7 +19,7 @@ class Tower(pygame.sprite.Sprite):
 
         self.health = 1000
         self.attack_speed = 1  # пострілів в секунду
-        self.damage = 10
+        self.damage = 60
         self.protection = 10  # відсотків
         self.hp_lvl = 1
         self.attack_speed_lvl = 1
@@ -31,13 +31,17 @@ class Tower(pygame.sprite.Sprite):
 
         self.projectiles = []
 
+    def update(self, screen, enemy_group):
+        self.draw(screen)
+        for projectile in self.projectiles:
+            projectile.update(screen)
+            if projectile.check_hit(enemy_group):
+                self.projectiles.remove(projectile)
+
     def draw(self, screen):
         screen.blit(self.image, self.rect)
         screen.blit(self.archer_image, self.archer_pos)
-        for projectile in self.projectiles:
-            projectile.update(screen)
-            if projectile.check_hit():
-                self.projectiles.remove(projectile)
+
     def take_damage(self):
         pass
 
@@ -72,14 +76,16 @@ class Projectile:
     def update(self, screen):
         self.x += self.vel_x
         self.y += self.vel_y
-        self.rect.center = (self.x, self.y)
+        self.rect.x, self.rect.y = (self.x, self.y)
         self.draw(screen)
 
     def draw(self, screen):
-        screen.blit(self.image, self.rect.center)
+        screen.blit(self.image, self.rect)
 
-    def check_hit(self):
-        if self.rect.centerx == self.target_x or self.rect.centery == self.target_y:
+    def check_hit(self, enemy_group):  # додати параметр enemy_group
+        if self.rect.collidepoint(self.target_x, self.target_y):  # оптимізовано(в учнів трішки по іншому буде написано)
             return True
-        else:
-            return False
+        for enemy in enemy_group.sprites():  # перевірка на дотикання до ворогів
+            if self.rect.colliderect(enemy.rect):
+                enemy.take_damage(self.damage)  # ворог отримує урон
+                return True
