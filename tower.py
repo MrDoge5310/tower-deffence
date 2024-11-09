@@ -81,6 +81,7 @@ class Projectile:
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+        pass
 
     def check_hit(self, enemy_group):  # додати параметр enemy_group
         if self.rect.collidepoint(self.target_x, self.target_y):  # оптимізовано(в учнів трішки по іншому буде написано)
