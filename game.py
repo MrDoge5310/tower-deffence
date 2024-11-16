@@ -3,6 +3,7 @@ from tower import Tower
 from enviorment import Environment
 from enemy import Enemy
 import random
+pygame.init()
 
 
 class Game:
@@ -57,7 +58,7 @@ class Game:
                     break
 
             self.tower.update(self.screen, self.enemy_group)  # дописати параметр self.enemy_group
-            self.enemy_group.update(self.screen)
+            self.enemy_group.update(self.screen, self.tower)
             self.bush_group.draw(self.screen)
 
             pygame.display.update()

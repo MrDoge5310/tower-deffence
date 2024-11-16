@@ -16,6 +16,8 @@ class Enemy(pygame.sprite.Sprite):
         self.health = 100
         self.protection = 20 / 100
         self.speed = 1
+        self.attack_speed = 1.5 * 60
+        self.attack_cooldown = self.attack_speed
         self.damage = 10
         self.pos = pos
 
@@ -40,6 +42,14 @@ class Enemy(pygame.sprite.Sprite):
     def calculate_incoming_damage(self):
         pass
 
+    def attack(self, tower):
+        if self.check_tower_reached(tower):
+            if self.attack_cooldown == 0:
+                tower.take_damage(self.damage)
+                self.attack_cooldown = self.attack_speed
+            else:
+                self.attack_cooldown -= 1
+
     def take_damage(self, damage):
         self.health -= damage
 
@@ -47,19 +57,24 @@ class Enemy(pygame.sprite.Sprite):
         if self.health <= 0:
             return True
 
-    def update(self, screen):
-        self.move()
+    def update(self, screen, tower):
+        self.move(tower)
         self.draw(screen)
+        self.attack(tower)
+
+    def check_tower_reached(self, tower):
+        return self.rect.colliderect(tower.rect)
 
     def draw(self, scr):
         scr.blit(self.image, self.rect)
         pygame.draw.rect(scr, "red", self.health_bar_bg)
         pygame.draw.rect(scr, "white", self.health_bar)
 
-    def move(self):
-        self.x += self.vel_x
-        self.y += self.vel_y
-        self.rect.center = (self.x, self.y)
+    def move(self, tower):
+        if not self.check_tower_reached(tower):
+            self.x += self.vel_x
+            self.y += self.vel_y
+            self.rect.center = (self.x, self.y)
 
         self.health_bar_bg.center = (self.x, self.y - 50)
         self.health_bar.x, self.health_bar.y = self.health_bar_bg.topleft

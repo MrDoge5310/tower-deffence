@@ -16,6 +16,10 @@ class Tower(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = pos
         self.archer_pos = (self.rect.centerx - 50, self.rect.centery - 170)
+        self.tower_image_pos = (self.rect.x, self.rect.y)
+        self.rect.width -= 100
+        self.rect.height -= 100
+        self.rect.center = pos
 
         self.health = 1000
         self.attack_speed = 1  # пострілів в секунду
@@ -29,6 +33,9 @@ class Tower(pygame.sprite.Sprite):
         self.can_attack = True
         self.cooldown = 60 / self.attack_speed
 
+        self.font = pygame.font.SysFont("Arial", 26)
+        self.text_pos = (self.archer_pos[0], self.archer_pos[1] - 20)
+
         self.projectiles = []
 
     def update(self, screen, enemy_group):
@@ -39,11 +46,14 @@ class Tower(pygame.sprite.Sprite):
                 self.projectiles.remove(projectile)
 
     def draw(self, screen):
-        screen.blit(self.image, self.rect)
+        text = self.font.render(f"{self.health} HP", 1, "white")
+        screen.blit(text, self.text_pos)
+
+        screen.blit(self.image, self.tower_image_pos)
         screen.blit(self.archer_image, self.archer_pos)
 
-    def take_damage(self):
-        pass
+    def take_damage(self, damage):
+        self.health -= damage
 
     def shot(self, pos):
         self.projectiles.append(Projectile(self.archer_pos, pos, self.damage))
