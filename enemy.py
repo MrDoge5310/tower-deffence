@@ -1,5 +1,6 @@
 import pygame
 import math
+import random
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -11,6 +12,8 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (self.height, self.width))
         self.rect = self.image.get_rect()
         self.rect.center = pos
+
+        self.wait_spawn = random.randint(0, 5) * 60
 
         self.target = target
         self.health = 100
@@ -66,16 +69,19 @@ class Enemy(pygame.sprite.Sprite):
         return self.rect.colliderect(tower.rect)
 
     def draw(self, scr):
-        scr.blit(self.image, self.rect)
-        pygame.draw.rect(scr, "red", self.health_bar_bg)
-        pygame.draw.rect(scr, "white", self.health_bar)
+        if self.wait_spawn <= 0:
+            scr.blit(self.image, self.rect)
+            pygame.draw.rect(scr, "red", self.health_bar_bg)
+            pygame.draw.rect(scr, "white", self.health_bar)
 
     def move(self, tower):
-        if not self.check_tower_reached(tower):
-            self.x += self.vel_x
-            self.y += self.vel_y
-            self.rect.center = (self.x, self.y)
+        if self.wait_spawn <= 0:
+            if not self.check_tower_reached(tower):
+                self.x += self.vel_x
+                self.y += self.vel_y
+                self.rect.center = (self.x, self.y)
 
-        self.health_bar_bg.center = (self.x, self.y - 50)
-        self.health_bar.x, self.health_bar.y = self.health_bar_bg.topleft
-        self.health_bar.width = self.health * (self.health_bar_bg.width / 100)
+            self.health_bar_bg.center = (self.x, self.y - 50)
+            self.health_bar.x, self.health_bar.y = self.health_bar_bg.topleft
+            self.health_bar.width = self.health * (self.health_bar_bg.width / 100)
+        self.wait_spawn -= 1

@@ -22,7 +22,8 @@ class Tower(pygame.sprite.Sprite):
         self.rect.center = pos
 
         self.health = 1000
-        self.attack_speed = 1  # пострілів в секунду
+        self.attack_speed = 0.5
+        self.reload = self.attack_speed * 60
         self.damage = 60
         self.protection = 10  # відсотків
         self.hp_lvl = 1
@@ -44,6 +45,8 @@ class Tower(pygame.sprite.Sprite):
             projectile.update(screen)
             if projectile.check_hit(enemy_group):
                 self.projectiles.remove(projectile)
+        if self.reload != 0:
+            self.reload -= 1
 
     def draw(self, screen):
         text = self.font.render(f"{self.health} HP", 1, "white")
@@ -56,7 +59,9 @@ class Tower(pygame.sprite.Sprite):
         self.health -= damage
 
     def shot(self, pos):
-        self.projectiles.append(Projectile(self.archer_pos, pos, self.damage))
+        if self.reload <= 0:
+            self.projectiles.append(Projectile(self.archer_pos, pos, self.damage))
+            self.reload = self.attack_speed * 60
 
 
 class Projectile:
